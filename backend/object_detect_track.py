@@ -1,15 +1,34 @@
 from ultralytics import YOLO
 import supervision as sv
+import numpy as np
 
 class_list = ["Can", "HDPE", "PET_Bottle", "Plastic_wrapper", "Tetrapak"]
+#change coordinates as required
+polygon = np.array([
+    [0, 0],
+    [0, 780],
+    [480, 780],
+    [480, 0]
+])
 START = sv.Point(560,0)
 END = sv.Point(560,1200)
 
 model = YOLO('detect-model\\best.pt')
+video_info = sv.VideoInfo.from_video_path('track.mp4') #specify the path
 line_Zone = []
+polygon_Zone = []
+
 for i in range(5):
+    polygon_Zone.append(sv.PolygonZone(polygon,frame_resolution_wh=video_info.resolution_wh))
     line_Zone.append(sv.LineZone(start=START, end=END))
-    
+
+polygon_zone_annotator=sv.PolygonZoneAnnotator(
+    zone=polygon_Zone[1], 
+    color=sv.Color.red(),
+    thickness=2,
+    text_thickness=1,
+    text_scale=0.5
+)   
 line_zone_annotator = sv.LineZoneAnnotator(
     thickness=2,
     text_thickness=1,
@@ -22,10 +41,11 @@ box_annotator = sv.BoxAnnotator(
     text_scale=0.5
 )
 
-def classCount(line_zone,det,id):
+def classCount(polygon_zone,line_zone,det,id):
+    polygon_zone.trigger(detections = det)
     line_zone.trigger(detections = det)
-    print(f"Count of {class_list[id]}: {line_zone.out_count}")
-    return line_zone.out_count
+    print(f"Count of {class_list[id]}: Current:{polygon_zone.current_count} Total:{line_zone.out_count}")
+    return polygon_zone.current_count,line_zone.out_count
 
 def coord(detections):
     for xyxy, _, class_id, tracker_id in detections:
@@ -33,6 +53,7 @@ def coord(detections):
 
 def video_tracking(cls_select, path):
     cls = [0,0,0,0,0]
+    cur = [0,0,0,0,0]
     cls_selectIndex=[]
     cls_notSelectIndex = [0,1,2,3,4]
     det=[0,0,0,0,0]
@@ -56,14 +77,15 @@ def video_tracking(cls_select, path):
 
         for index in cls_selectIndex:
             det[index] = detections[detections.class_id == index]
-            cls[index] = classCount(line_Zone[index],det[index],index)
+            cur[index],cls[index] = classCount(polygon_Zone[index],line_Zone[index],det[index],index)
 
         coord(detections)
 
         frame = box_annotator.annotate(scene=frame, detections=detections, labels=labels)
-        #To make line visible (Only be able to see the count of CAN Class)
-        line_zone_annotator.annotate(frame,line_Zone[0])
+        #To make line and Zone visible (Only be able to see the count of HDPE Class)
+        frame=polygon_zone_annotator.annotate(frame)
+        line_zone_annotator.annotate(frame,line_Zone[1])
         for i in cls_select:
-            final_count[i]=cls[class_list.index(i)]
+            final_count[i]={'Current':cur[class_list.index(i)],'Total':cls[class_list.index(i)]}
         # print("Final count of each class = ",final_count)
         yield frame, final_count
