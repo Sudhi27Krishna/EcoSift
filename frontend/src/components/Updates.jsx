@@ -7,18 +7,18 @@ const Updates = ({ clsList }) => {
         <thead>
           <tr>
             <th className="border-green-600 border-2 px-4 py-2">Waste Classes</th>
+            <th className="border-green-600 border-2 px-4 py-2">Current</th>
             <th className="border-green-600 border-2 px-4 py-2">Encountered</th>
-            <th className="border-green-600 border-2 px-4 py-2">Sorted</th>
           </tr>
         </thead>
         <tbody>
           {
-            Object.keys(clsList).map((key, index) => {
+            Object.keys(clsList).map((cls) => {
               return (
-                <tr key={key} className='bg-gray-100'>
-                  <td className="border-green-600 border-2 px-4 py-2">{key}</td>
-                  <td className="border-green-600 border-2 px-4 py-2">{clsList[key]}</td>
-                  <td className="border-green-600 border-2 px-4 py-2">{index + 1}</td>
+                <tr key={cls} className='bg-gray-100'>
+                  <td className="border-green-600 border-2 px-4 py-2">{cls}</td>
+                  <td className="border-green-600 border-2 px-4 py-2">{clsList[cls]["Current"]}</td>
+                  <td className="border-green-600 border-2 px-4 py-2">{clsList[cls]["Total"]}</td>
                 </tr>
               )
             })

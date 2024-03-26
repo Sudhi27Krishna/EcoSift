@@ -10,6 +10,7 @@ def generate_frames(clsList, path_x=''):
         ref, buffer = cv2.imencode('.jpg', result)
 
         frame_bytes = buffer.tobytes()
+        print("Sudhi",cls_dict)
         cls_json = json.dumps(cls_dict)
 
         yield (frame_bytes, cls_json)
