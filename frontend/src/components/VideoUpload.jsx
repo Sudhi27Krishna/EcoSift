@@ -41,7 +41,7 @@ const VideoUpload = () => {
   }, []);
 
   const handleRequestFrames = () => {
-    socket.current.emit('request_frames', 'uploads\\uploaded-video.mp4');
+    socket.current.emit('request_frames_video', 'uploads\\uploaded-video.mp4');
   };
 
   const handleFileChange = (event) => {
@@ -102,7 +102,7 @@ const VideoUpload = () => {
                 </button>
               </div>
               <div className='w-full'>
-                <img ref={videoRef} width={1200} height={600} />
+                <img ref={videoRef} width={1200} height={500} />
               </div>
             </div>
           )}

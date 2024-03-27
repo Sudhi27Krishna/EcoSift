@@ -1,16 +1,24 @@
 from flask import request, jsonify
-from object_detect_track import video_tracking
+from object_detect_track import video_tracking, webcam_tracking
 from config import app, socketio
 import os, json, cv2
 
 customClsList = []
 
-def generate_frames(clsList, path_x=''):
+def generate_frames_video(clsList, path_x=''):
     for result, cls_dict in video_tracking(clsList, path_x):
         ref, buffer = cv2.imencode('.jpg', result)
 
         frame_bytes = buffer.tobytes()
-        print("Sudhi",cls_dict)
+        cls_json = json.dumps(cls_dict)
+
+        yield (frame_bytes, cls_json)
+
+def generate_frames_webcam(clsList):
+    for result, cls_dict in webcam_tracking(clsList):
+        ref, buffer = cv2.imencode('.jpg', result)
+
+        frame_bytes = buffer.tobytes()
         cls_json = json.dumps(cls_dict)
 
         yield (frame_bytes, cls_json)
@@ -53,9 +61,14 @@ def handle_connect():
 def handle_disconnect():
     print('Client disconnected')
 
-@socketio.on('request_frames')
+@socketio.on('request_frames_video')
 def handle_request_frames(path_x):
-    for frame_bytes, cls_json in generate_frames(customClsList, path_x):
+    for frame_bytes, cls_json in generate_frames_video(customClsList, path_x):
+        socketio.emit('update_frame', {'frame': frame_bytes, 'cls': cls_json})
+
+@socketio.on('request_frames_webcam')
+def handle_request_frames():
+    for frame_bytes, cls_json in generate_frames_webcam(customClsList):
         socketio.emit('update_frame', {'frame': frame_bytes, 'cls': cls_json})
 
 

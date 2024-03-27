@@ -40,7 +40,7 @@ const WebcamPage = () => {
 
     const handleRequestFrames = () => {
         setRequestStatus(true);
-        socket.current.emit('request_frames', 'uploads\\uploaded-video.mp4');
+        socket.current.emit('request_frames_webcam');
     };
 
     return (
