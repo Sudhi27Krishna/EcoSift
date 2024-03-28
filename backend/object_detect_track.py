@@ -37,15 +37,19 @@ def setPolygonVideoTracking(path):
         polygon_Zone.append(sv.PolygonZone(polygon,frame_resolution_wh=video_info.resolution_wh))
         line_Zone.append(sv.LineZone(start=START, end=END))
 
-def classCount(polygon_zone,line_zone,det,id):
+def classCount(polygon_zone,line_zone,cnt,det,id):
     polygon_zone.trigger(detections = det)
     line_zone.trigger(detections = det)
+    cnt+=polygon_zone.current_count
     print(f"Count of {class_list[id]}: Current:{polygon_zone.current_count} Total:{line_zone.out_count}")
     return polygon_zone.current_count,line_zone.out_count
 
 def coord(detections):
+    coordinates = dict()
     for xyxy, _, class_id, tracker_id in detections:
         print(f"{class_list[class_id]} {tracker_id} {xyxy}")
+        coordinates[f"{class_list[class_id]} {tracker_id}"] = list(xyxy)
+    return coordinates
 
 def video_tracking(cls_select, path):
     setPolygonVideoTracking(path)
@@ -79,6 +83,7 @@ def video_tracking(cls_select, path):
         cls_notSelectIndex.remove(class_list.index(i))
 
     for result in model.track(source=path, show=False, stream=True, persist=True, agnostic_nms=True, tracker="bytetrack.yaml", conf=0.5):
+        coordinates = dict()
         frame = result.orig_img
         detections = sv.Detections.from_yolov8(result)
         if result.boxes.id is not None:
@@ -93,14 +98,15 @@ def video_tracking(cls_select, path):
 
         for index in cls_selectIndex:
             det[index] = detections[detections.class_id == index]
-            cur[index],cls[index] = classCount(polygon_Zone[index],line_Zone[index],det[index],index)
+            cur[index],cls[index] = classCount(polygon_Zone[index],line_Zone[index],cls[index],det[index],index)
 
-        coord(detections)
+        coordinates = coord(detections)
+        print(coordinates)
 
         frame = box_annotator.annotate(scene=frame, detections=detections, labels=labels)
         #To make line and Zone visible (Only be able to see the count of HDPE Class)
         frame=polygon_zone_annotator.annotate(frame)
-        line_zone_annotator.annotate(frame,line_Zone[1])
+        # line_zone_annotator.annotate(frame,line_Zone[1])
         for i in cls_select:
             final_count[i]={'Current':str(cur[class_list.index(i)]),'Total':str(cls[class_list.index(i)])}
         # print("Final count of each class = ",final_count)
@@ -157,6 +163,7 @@ def webcam_tracking(cls_select):
         cls_notSelectIndex.remove(class_list.index(i))
 
     for result in model.track(source=0, show=False, stream=True, persist=True, agnostic_nms=True, tracker="bytetrack.yaml", conf=0.5):
+        coordinates = dict()
         frame = result.orig_img
         detections = sv.Detections.from_yolov8(result)
         if result.boxes.id is not None:
@@ -171,14 +178,15 @@ def webcam_tracking(cls_select):
 
         for index in cls_selectIndex:
             det[index] = detections[detections.class_id == index]
-            cur[index],cls[index] = classCount(polygon_Zone[index],line_Zone[index],det[index],index)
+            cur[index],cls[index] = classCount(polygon_Zone[index],line_Zone[index],cls[index],det[index],index)
 
-        coord(detections)
-
+        coordinates=coord(detections)
+        print(coordinates)
+        
         frame = box_annotator.annotate(scene=frame, detections=detections, labels=labels)
         #To make line and Zone visible (Only be able to see the count of HDPE Class)
-        frame=polygon_zone_annotator.annotate(frame)
-        line_zone_annotator.annotate(frame,line_Zone[1])
+        frame = polygon_zone_annotator.annotate(frame)
+        # line_zone_annotator.annotate(frame,line_Zone[1])
         for i in cls_select:
             final_count[i]={'Current':str(cur[class_list.index(i)]),'Total':str(cls[class_list.index(i)])}
         # print("Final count of each class = ",final_count)
