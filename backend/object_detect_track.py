@@ -2,6 +2,7 @@ from ultralytics import YOLO
 import supervision as sv
 import numpy as np
 import argparse
+import cv2
 
 class_list = ["Can", "HDPE", "PET_Bottle", "Plastic_wrapper", "Tetrapak"]
 
@@ -31,7 +32,7 @@ def setPolygonVideoTracking(path):
     ])
     START = sv.Point(video_info.width//2,0)
     END = sv.Point(video_info.width//2,video_info.height)
-    for i in range(5):
+    for i in range(6):
         global polygon_Zone
         global line_Zone
         polygon_Zone.append(sv.PolygonZone(polygon,frame_resolution_wh=video_info.resolution_wh))
@@ -44,17 +45,25 @@ def classCount(polygon_zone,line_zone,cnt,det,id):
     print(f"Count of {class_list[id]}: Current:{polygon_zone.current_count} Total:{line_zone.out_count}")
     return polygon_zone.current_count,line_zone.out_count
 
-def coord(detections):
+def centerPoint(points):
+    x_center = int((points[0]+points[2])//2)
+    y_center = int((points[1]+points[3])//2)
+    return [x_center, y_center]
+
+def coord(detections,frame):
     coordinates = dict()
     for xyxy, _, class_id, tracker_id in detections:
         print(f"{class_list[class_id]} {tracker_id} {xyxy}")
-        coordinates[f"{class_list[class_id]} {tracker_id}"] = list(xyxy)
-    return coordinates
+        key = f"{class_list[class_id]} {tracker_id}"
+        coordinates[key] = centerPoint(list(xyxy))
+        print(coordinates[key][0],coordinates[key][1])
+        frame = cv2.circle(frame, (coordinates[key][0],coordinates[key][1]), radius=10, color=(0, 0, 0), thickness=-1)
+    return coordinates, frame
 
 def video_tracking(cls_select, path):
     setPolygonVideoTracking(path)
     polygon_zone_annotator=sv.PolygonZoneAnnotator(
-        zone=polygon_Zone[1], 
+        zone=polygon_Zone[5], 
         color=sv.Color.red(),
         thickness=2,
         text_thickness=1,
@@ -100,13 +109,21 @@ def video_tracking(cls_select, path):
             det[index] = detections[detections.class_id == index]
             cur[index],cls[index] = classCount(polygon_Zone[index],line_Zone[index],cls[index],det[index],index)
 
-        coordinates = coord(detections)
+        polygon_Zone[5].trigger(detections = detections)
+        # COORDINATE PRINTING OF ALL FRAMES
+        coordinates, frame = coord(detections,frame)
         print(coordinates)
 
         frame = box_annotator.annotate(scene=frame, detections=detections, labels=labels)
         #To make line and Zone visible (Only be able to see the count of HDPE Class)
         frame=polygon_zone_annotator.annotate(frame)
-        # line_zone_annotator.annotate(frame,line_Zone[1])
+
+        # if(polygon_Zone[5].current_count == 2):
+        #     #contains coordinates of saved frame
+        #     coordinates=coord(detections)
+        #     cv2.imwrite("frame%d.jpg" % polygon_Zone[5].current_count, frame)
+        line_zone_annotator.annotate(frame,line_Zone[1])
+
         for i in cls_select:
             final_count[i]={'Current':str(cur[class_list.index(i)]),'Total':str(cls[class_list.index(i)])}
         # print("Final count of each class = ",final_count)
@@ -126,14 +143,14 @@ def webcam_tracking(cls_select):
     START = sv.Point(frame_width//2,0)
     END = sv.Point(frame_width//2,frame_height)
 
-    for i in range(5):
+    for i in range(6):
         global polygon_Zone
         global line_Zone
         polygon_Zone.append(sv.PolygonZone(polygon,frame_resolution_wh=tuple(args.webcam_resolution)))
         line_Zone.append(sv.LineZone(start=START, end=END))
 
     polygon_zone_annotator=sv.PolygonZoneAnnotator(
-        zone=polygon_Zone[1], 
+        zone=polygon_Zone[5], 
         color=sv.Color.red(),
         thickness=2,
         text_thickness=1,
@@ -180,13 +197,21 @@ def webcam_tracking(cls_select):
             det[index] = detections[detections.class_id == index]
             cur[index],cls[index] = classCount(polygon_Zone[index],line_Zone[index],cls[index],det[index],index)
 
-        coordinates=coord(detections)
+        polygon_Zone[5].trigger(detections = detections)
+        # COORDINATE PRINTING OF ALL FRAMES
+        coordinates, frame = coord(detections, frame)
         print(coordinates)
         
         frame = box_annotator.annotate(scene=frame, detections=detections, labels=labels)
         #To make line and Zone visible (Only be able to see the count of HDPE Class)
         frame = polygon_zone_annotator.annotate(frame)
-        # line_zone_annotator.annotate(frame,line_Zone[1])
+        line_zone_annotator.annotate(frame,line_Zone[1])
+
+        # if(polygon_Zone[5].current_count == 1):
+        #     #contains coordinates of saved frame
+        #     coordinates=coord(detections)
+        #     cv2.imwrite("frame%d.jpg" % polygon_Zone[5].current_count, frame)
+
         for i in cls_select:
             final_count[i]={'Current':str(cur[class_list.index(i)]),'Total':str(cls[class_list.index(i)])}
         # print("Final count of each class = ",final_count)
