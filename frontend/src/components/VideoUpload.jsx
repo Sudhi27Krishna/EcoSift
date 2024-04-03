@@ -102,7 +102,7 @@ const VideoUpload = () => {
                 </button>
               </div>
               <div className='w-full'>
-                <img ref={videoRef} width={1200} height={500} />
+                <img ref={videoRef} width={1200} height={600} />
               </div>
             </div>
           )}

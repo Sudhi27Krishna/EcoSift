@@ -57,7 +57,7 @@ def coord(detections,frame):
         key = f"{class_list[class_id]} {tracker_id}"
         coordinates[key] = centerPoint(list(xyxy))
         print(coordinates[key][0],coordinates[key][1])
-        frame = cv2.circle(frame, (coordinates[key][0],coordinates[key][1]), radius=10, color=(0, 0, 0), thickness=-1)
+        frame = cv2.circle(frame, (coordinates[key][0],coordinates[key][1]), radius=10, color=(255, 255, 255), thickness=-1)
     return coordinates, frame
 
 def video_tracking(cls_select, path):
@@ -179,7 +179,7 @@ def webcam_tracking(cls_select):
         cls_selectIndex.append(class_list.index(i))
         cls_notSelectIndex.remove(class_list.index(i))
 
-    for result in model.track(source=0, show=False, stream=True, persist=True, agnostic_nms=True, tracker="bytetrack.yaml", conf=0.5):
+    for result in model.track(source=1, show=False, stream=True, persist=True, agnostic_nms=True, tracker="bytetrack.yaml", conf=0.5):
         coordinates = dict()
         frame = result.orig_img
         detections = sv.Detections.from_yolov8(result)
