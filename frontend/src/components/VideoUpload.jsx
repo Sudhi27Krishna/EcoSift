@@ -80,7 +80,7 @@ const VideoUpload = () => {
 
   return (
       <div className='flex flex-row justify-between'>
-        <div className="w-3/4 m-4 px-4 bg-gray-100 rounded-lg shadow-md h-[40rem]">
+        <div className="w-3/4 mx-2 px-4 bg-gray-200 rounded-lg shadow-md h-[40rem]">
           <label id="upload-video-label" className="block text-lg font-semibold mb-2">Upload Video</label>
           <input
             type="file"
@@ -102,7 +102,7 @@ const VideoUpload = () => {
                 </button>
               </div>
               <div className='w-full'>
-                <img ref={videoRef} width={1200} height={600} />
+                <img ref={videoRef} width={1200} height={500} />
               </div>
             </div>
           )}

@@ -45,17 +45,19 @@ const WebcamPage = () => {
 
     return (
         <div className='flex flex-row justify-between'>
-            <div className="w-3/4 m-4 px-4 bg-gray-100 rounded-lg shadow-md h-[40rem]">
+            <div className="w-3/4 mx-2 px-4 bg-gray-200 rounded-lg shadow-md h-[40rem]">
                 {requestStatus ? (
-                    <div className='w-full'>
-                        <img ref={videoRef} width={1200} height={600} />
+                    <div className='w-full h-full flex items-center justify-center'>
+                        <img className='mt-5' ref={videoRef} width={800} />
                     </div>) : (
-                    <button
-                        onClick={handleRequestFrames}
-                        className="mt-4 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 focus:outline-none focus:shadow-outline-blue active:bg-blue-800"
-                    >
-                        Request Frames
-                    </button>)
+                    <div className='w-full h-full flex items-center justify-center'>
+                        <button
+                            onClick={handleRequestFrames}
+                            className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 focus:outline-none focus:shadow-outline-blue active:bg-blue-800"
+                        >
+                            Request Frames
+                        </button>
+                    </div>)
                 }
 
             </div>

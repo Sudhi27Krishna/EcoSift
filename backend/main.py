@@ -7,7 +7,7 @@ customClsList = []
 
 def generate_frames_video(clsList, path_x=''):
     for result, cls_dict in video_tracking(clsList, path_x):
-        result = cv2.resize(result,(1200,600))
+        result = cv2.resize(result,(1200,500))
         ref, buffer = cv2.imencode('.jpg', result)
         frame_bytes = buffer.tobytes()
         cls_json = json.dumps(cls_dict)
@@ -16,7 +16,7 @@ def generate_frames_video(clsList, path_x=''):
 
 def generate_frames_webcam(clsList):
     for result, cls_dict in webcam_tracking(clsList):
-        result = cv2.resize(result,(1200,600))
+        result = cv2.resize(result,(640,480))
         ref, buffer = cv2.imencode('.jpg', result)
         frame_bytes = buffer.tobytes()
         cls_json = json.dumps(cls_dict)

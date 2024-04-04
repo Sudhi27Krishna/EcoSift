@@ -15,7 +15,7 @@ def parse_arguments() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="YOLOv8 live")
     parser.add_argument(
         "--webcam-resolution", 
-        default=[1200, 600], 
+        default=[640, 480], 
         nargs=2, 
         type=int
     )
@@ -179,7 +179,7 @@ def webcam_tracking(cls_select):
         cls_selectIndex.append(class_list.index(i))
         cls_notSelectIndex.remove(class_list.index(i))
 
-    for result in model.track(source=1, show=False, stream=True, persist=True, agnostic_nms=True, tracker="bytetrack.yaml", conf=0.5):
+    for result in model.track(source=0, show=False, stream=True, persist=True, agnostic_nms=True, tracker="bytetrack.yaml", conf=0.5):
         coordinates = dict()
         frame = result.orig_img
         detections = sv.Detections.from_yolov8(result)

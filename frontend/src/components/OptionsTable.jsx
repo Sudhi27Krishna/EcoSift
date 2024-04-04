@@ -41,8 +41,48 @@ const OptionsTable = ({ setClsList, setOptionsSelected }) => {
     }
 
     return (
-        <div className='flex flex-col items-center justify-start w-1/4 bg-gray-100 rounded-lg shadow-md m-4 p-2'>
-            <table className="table-auto w-fit">
+        <div className='flex flex-col items-center justify-start w-1/4 bg-gray-200 rounded-lg shadow-md mx-2 p-2'>
+            <div className="flex flex-col justify-center overflow-x-auto shadow-md sm:rounded-lg w-full">
+                <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                    <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                        <tr>
+                            <th scope="col" className="px-6 py-3">
+                                Sort
+                            </th>
+                            <th scope="col" className="px-6 py-3">
+                                Waste Classes
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {
+                            clsList.map(item => {
+                                return (
+                                    <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                        <td className="w-4 p-4">
+                                            <div className="flex items-center">
+                                                <input className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                                                    type="checkbox" value={item} onChange={(e) => handleChange(e.target.value)} checked={selectedClasses.includes(item)} />
+                                            </div>
+                                        </td>
+                                        <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                            {item}
+                                        </th>
+                                    </tr>
+                                )
+                            })
+                        }
+                    </tbody>
+                </table>
+                <button
+                    onClick={handleSumbit}
+                    className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 focus:outline-none focus:shadow-outline-blue active:bg-blue-800"
+                >
+                    Submit Options
+                </button>
+            </div>
+
+            {/* <table className="table-auto w-fit">
                 <thead>
                     <tr>
                         <th className="border-green-600 border-2 px-4 py-2">Sort</th>
@@ -67,7 +107,7 @@ const OptionsTable = ({ setClsList, setOptionsSelected }) => {
                 className="mt-4 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 focus:outline-none focus:shadow-outline-blue active:bg-blue-800"
             >
                 Submit Options
-            </button>
+            </button> */}
         </div>
     )
 }
