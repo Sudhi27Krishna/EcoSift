@@ -45,6 +45,14 @@ def classCount(polygon_zone,line_zone,cnt,det,id):
     print(f"Count of {class_list[id]}: Current:{polygon_zone.current_count} Total:{line_zone.out_count}")
     return polygon_zone.current_count,line_zone.out_count
 
+def lineCircle(frame):
+    r=240
+    frame = cv2.circle(frame, (320, 240), radius=5, color=(0,255,255), thickness=-1)
+    frame = cv2.circle(frame, (320, 240), radius=r, color=(0,255,100), thickness=1)
+    frame = cv2.line(frame, (320,240-r), (320,240+r), color=(0,255,100), thickness=1)
+    frame = cv2.line(frame, (320-r,240), (320+r,240), color=(0,255,100), thickness=1)
+    return frame
+
 def centerPoint(points):
     x_center = int((points[0]+points[2])//2)
     y_center = int((points[1]+points[3])//2)
@@ -179,9 +187,10 @@ def webcam_tracking(cls_select):
         cls_selectIndex.append(class_list.index(i))
         cls_notSelectIndex.remove(class_list.index(i))
 
-    for result in model.track(source=0, show=False, stream=True, persist=True, agnostic_nms=True, tracker="bytetrack.yaml", conf=0.5):
+    for result in model.track(source=1, show=False, stream=True, persist=True, agnostic_nms=True, tracker="bytetrack.yaml", conf=0.5):
         coordinates = dict()
-        frame = result.orig_img
+        frame = lineCircle(result.orig_img)
+
         detections = sv.Detections.from_yolov8(result)
         if result.boxes.id is not None:
             detections.tracker_id = result.boxes.id.cpu().numpy().astype(int)
@@ -204,8 +213,8 @@ def webcam_tracking(cls_select):
         
         frame = box_annotator.annotate(scene=frame, detections=detections, labels=labels)
         #To make line and Zone visible (Only be able to see the count of HDPE Class)
-        frame = polygon_zone_annotator.annotate(frame)
-        line_zone_annotator.annotate(frame,line_Zone[1])
+            # frame = polygon_zone_annotator.annotate(frame)
+            # line_zone_annotator.annotate(frame,line_Zone[1])
 
         # if(polygon_Zone[5].current_count == 1):
         #     #contains coordinates of saved frame
