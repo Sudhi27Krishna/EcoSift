@@ -187,7 +187,7 @@ def webcam_tracking(cls_select):
         cls_selectIndex.append(class_list.index(i))
         cls_notSelectIndex.remove(class_list.index(i))
 
-    for result in model.track(source=1, show=False, stream=True, persist=True, agnostic_nms=True, tracker="bytetrack.yaml", conf=0.5):
+    for result in model.track(source=0, show=False, stream=True, persist=True, agnostic_nms=True, tracker="bytetrack.yaml", conf=0.5):
         coordinates = dict()
         frame = lineCircle(result.orig_img)
 
