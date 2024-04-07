@@ -6,22 +6,24 @@ import os, json, cv2
 customClsList = []
 
 def generate_frames_video(clsList, path_x=''):
-    for result, cls_dict in video_tracking(clsList, path_x):
+    for result, cls_dict, coordinates_dict in video_tracking(clsList, path_x):
         result = cv2.resize(result,(1200,500))
         ref, buffer = cv2.imencode('.jpg', result)
         frame_bytes = buffer.tobytes()
         cls_json = json.dumps(cls_dict)
+        coordinates_json = json.dumps(coordinates_dict)
 
-        yield (frame_bytes, cls_json)
+        yield (frame_bytes, cls_json, coordinates_json)
 
 def generate_frames_webcam(clsList):
-    for result, cls_dict in webcam_tracking(clsList):
+    for result, cls_dict, coordinates_dict in webcam_tracking(clsList):
         result = cv2.resize(result,(640,480))
         ref, buffer = cv2.imencode('.jpg', result)
         frame_bytes = buffer.tobytes()
         cls_json = json.dumps(cls_dict)
+        coordinates_json = json.dumps(coordinates_dict)
 
-        yield (frame_bytes, cls_json)
+        yield (frame_bytes, cls_json, coordinates_json)
 
 # POST method to accept custom clsList
 @app.route('/receive_list', methods=['POST'])
@@ -63,13 +65,13 @@ def handle_disconnect():
 
 @socketio.on('request_frames_video')
 def handle_request_frames(path_x):
-    for frame_bytes, cls_json in generate_frames_video(customClsList, path_x):
-        socketio.emit('update_frame', {'frame': frame_bytes, 'cls': cls_json})
+    for frame_bytes, cls_json, coordinates_json in generate_frames_video(customClsList, path_x):
+        socketio.emit('update_frame', {'frame': frame_bytes, 'cls': cls_json, 'coord': coordinates_json})
 
 @socketio.on('request_frames_webcam')
 def handle_request_frames():
-    for frame_bytes, cls_json in generate_frames_webcam(customClsList):
-        socketio.emit('update_frame', {'frame': frame_bytes, 'cls': cls_json})
+    for frame_bytes, cls_json, coordinates_json in generate_frames_webcam(customClsList):
+        socketio.emit('update_frame', {'frame': frame_bytes, 'cls': cls_json, 'coord': coordinates_json})
 
 
 if __name__ == "__main__":

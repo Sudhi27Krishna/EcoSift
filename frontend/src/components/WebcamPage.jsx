@@ -8,6 +8,7 @@ const url = 'http://127.0.0.1:5000';
 const WebcamPage = () => {
     const [requestStatus, setRequestStatus] = useState(false);
     const [clsList, setClsList] = useState({});
+    const [coordList, setCoordList] = useState({});
     const [optionsSelected, setOptionsSelected] = useState(false);
 
     const videoRef = useRef(null);
@@ -21,6 +22,8 @@ const WebcamPage = () => {
             videoRef.current.src = imageUrl;
 
             const clsList = JSON.parse(data.cls);
+            const coordList = JSON.parse(data.coord);
+            setCoordList(coordList);
             console.log(clsList);
             setClsList(clsList);
         });
@@ -61,7 +64,7 @@ const WebcamPage = () => {
                 }
 
             </div>
-            {optionsSelected ? <Updates clsList={clsList} /> :
+            {optionsSelected ? <Updates clsList={clsList} coordList={coordList} /> :
                 <OptionsTable setClsList={setClsList} setOptionsSelected={setOptionsSelected} />
             }
         </div>

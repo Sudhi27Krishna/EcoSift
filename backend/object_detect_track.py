@@ -62,8 +62,10 @@ def coord(detections,frame):
     coordinates = dict()
     for xyxy, _, class_id, tracker_id in detections:
         print(f"{class_list[class_id]} {tracker_id} {xyxy}")
-        key = f"{class_list[class_id]} {tracker_id}"
-        coordinates[key] = centerPoint(list(xyxy))
+        key = f"{tracker_id}"
+        info = centerPoint(list(xyxy))
+        info.append(class_list[class_id])
+        coordinates[key] = info
         print(coordinates[key][0],coordinates[key][1])
         frame = cv2.circle(frame, (coordinates[key][0],coordinates[key][1]), radius=10, color=(255, 255, 255), thickness=-1)
     return coordinates, frame
@@ -135,7 +137,7 @@ def video_tracking(cls_select, path):
         for i in cls_select:
             final_count[i]={'Current':str(cur[class_list.index(i)]),'Total':str(cls[class_list.index(i)])}
         # print("Final count of each class = ",final_count)
-        yield frame, final_count
+        yield frame, final_count, coordinates
 
 
 def webcam_tracking(cls_select):
@@ -224,4 +226,4 @@ def webcam_tracking(cls_select):
         for i in cls_select:
             final_count[i]={'Current':str(cur[class_list.index(i)]),'Total':str(cls[class_list.index(i)])}
         # print("Final count of each class = ",final_count)
-        yield frame, final_count
+        yield frame, final_count, coordinates

@@ -1,6 +1,6 @@
 import React from 'react'
 
-const Updates = ({ clsList }) => {
+const Updates = ({ clsList, coordList }) => {
   return (
     <div className='flex flex-col items-center justify-between w-1/4 bg-gray-200 rounded-lg shadow-md mx-2 p-2'>
       <div className="flex flex-col justify-center overflow-x-auto shadow-md sm:rounded-lg w-full">
@@ -57,17 +57,17 @@ const Updates = ({ clsList }) => {
           </thead>
           <tbody>
             {
-              Object.keys(clsList).map((cls) => {
+              Object.keys(coordList).map((item_id) => {
                 return (
-                  <tr key={cls} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                  <tr key={item_id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                     <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                      {clsList[cls]["Current"]}
+                      {item_id}
                     </th>
                     <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                      {cls}
+                      {coordList[item_id][2]}
                     </th>
                     <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                      {clsList[cls]["Total"]}
+                      ({coordList[item_id][0] + "," + coordList[item_id][1]})
                     </th>
                   </tr>
                 )
