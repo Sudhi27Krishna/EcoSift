@@ -46,12 +46,50 @@ const WebcamPage = () => {
         socket.current.emit('request_frames_webcam');
     };
 
+    const handleStopFrames = async () => {
+        try {
+            const response = await fetch(url.concat('/stop_webcam_tracking'));
+            console.log(response.data);
+            setRequestStatus(false);
+        } catch (error) {
+            console.log("Frame stop error", error);
+        }
+    };
+
+    const handleSegregation = async () => {
+        try {
+            await fetch(url.concat('/segregate'), {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ coordList })
+            })
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
     return (
         <div className='flex flex-row justify-between'>
             <div className="w-3/4 mx-2 px-4 bg-gray-200 rounded-lg shadow-md h-[40rem]">
                 {requestStatus ? (
-                    <div className='w-full h-full flex items-center justify-center'>
+                    <div className='w-full h-full flex items-center justify-between'>
                         <img className='mt-5' ref={videoRef} width={800} />
+                        <div className="w-1/4 h-full flex flex-col items-center justify-center">
+                            <button
+                                onClick={handleStopFrames}
+                                className="bg-red-500 text-white my-2 py-2 px-6 rounded hover:bg-red-600 focus:outline-none focus:shadow-outline-red active:bg-red-800"
+                            >
+                                Stop Detection
+                            </button>
+                            <button
+                                onClick={handleSegregation}
+                                className="bg-green-500 text-white my-2 py-2 px-4 rounded hover:bg-green-600 focus:outline-none focus:shadow-outline-green active:bg-green-800"
+                            >
+                                Start Segregation
+                            </button>
+                        </div>
                     </div>) : (
                     <div className='w-full h-full flex items-center justify-center'>
                         <button

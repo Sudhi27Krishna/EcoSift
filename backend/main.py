@@ -1,5 +1,5 @@
 from flask import request, jsonify
-from object_detect_track import video_tracking, webcam_tracking
+from object_detect_track import video_tracking, webcam_tracking, stop_event
 from config import app, socketio
 import os, json, cv2
 
@@ -17,6 +17,8 @@ def generate_frames_video(clsList, path_x=''):
 
 def generate_frames_webcam(clsList):
     for result, cls_dict, coordinates_dict in webcam_tracking(clsList):
+        if stop_event.is_set():
+            break
         result = cv2.resize(result,(640,480))
         ref, buffer = cv2.imencode('.jpg', result)
         frame_bytes = buffer.tobytes()
@@ -71,8 +73,22 @@ def handle_request_frames(path_x):
 @socketio.on('request_frames_webcam')
 def handle_request_frames():
     for frame_bytes, cls_json, coordinates_json in generate_frames_webcam(customClsList):
+        if stop_event.is_set():  # Check if stop event is set
+            break
         socketio.emit('update_frame', {'frame': frame_bytes, 'cls': cls_json, 'coord': coordinates_json})
 
+# To stop the detection and tracking
+@app.route('/stop_webcam_tracking')
+def stop_webcam_tracking():
+    stop_event.set()  # Set the stop event
+    return jsonify({'message': 'Webcam tracking stopped'})
+
+# To accept the list of coordinates and initiate the segregation process
+@app.route('/segregate', methods=['POST'])
+def delta_arm_initiate():
+    recv_coord = request.json.get('coordList', {})
+
+    return jsonify({'message': 'Coordinates sent successfully'}), 201
 
 if __name__ == "__main__":
     socketio.run(app, debug=True)

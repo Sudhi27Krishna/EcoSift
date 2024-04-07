@@ -3,6 +3,9 @@ import supervision as sv
 import numpy as np
 import argparse
 import cv2
+from multiprocessing import Event 
+
+stop_event = Event()
 
 class_list = ["Can", "HDPE", "PET_Bottle", "Plastic_wrapper", "Tetrapak"]
 
@@ -190,6 +193,8 @@ def webcam_tracking(cls_select):
         cls_notSelectIndex.remove(class_list.index(i))
 
     for result in model.track(source=0, show=False, stream=True, persist=True, agnostic_nms=True, tracker="bytetrack.yaml", conf=0.5):
+        if stop_event.is_set():  # Check if stop event is set
+            break
         coordinates = dict()
         frame = lineCircle(result.orig_img)
 
