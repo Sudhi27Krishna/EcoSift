@@ -86,7 +86,7 @@ def stop_webcam_tracking():
 # To accept the list of coordinates and initiate the segregation process
 @app.route('/segregate', methods=['POST'])
 def delta_arm_initiate():
-    recv_coord = request.json.get('coordList', {})
+    recv_coord = request.json.get('delta_coords', [])
 
     return jsonify({'message': 'Coordinates sent successfully'}), 201
 

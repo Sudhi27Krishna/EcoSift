@@ -57,13 +57,17 @@ const WebcamPage = () => {
     };
 
     const handleSegregation = async () => {
+        const delta_coords = [];
+        Object.keys(coordList).forEach(key => {
+            delta_coords.push(new Array(coordList[key][0], coordList[key][1]));
+        });
         try {
             await fetch(url.concat('/segregate'), {
                 method: 'POST',
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ coordList })
+                body: JSON.stringify({ delta_coords })
             })
         } catch (error) {
             console.log(error);
