@@ -1,7 +1,9 @@
+import time
 from flask import request, jsonify
 from object_detect_track import video_tracking, webcam_tracking, stop_event
 from config import app, socketio
 import os, json, cv2
+from delta_arm import segregate
 
 customClsList = []
 
@@ -87,6 +89,11 @@ def stop_webcam_tracking():
 @app.route('/segregate', methods=['POST'])
 def delta_arm_initiate():
     recv_coord = request.json.get('delta_coords', [])
+    print("Segregation starts................")
+    time.sleep(10)
+    for coords in recv_coord:
+        segregate(coords[0], coords[1])
+        time.sleep(3)
 
     return jsonify({'message': 'Coordinates sent successfully'}), 201
 

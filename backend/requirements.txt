@@ -3,3 +3,4 @@ Flask-SocketIO
 flask-cors
 supervision==0.3.0
 ultralytics
+pyserial
