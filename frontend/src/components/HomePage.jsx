@@ -2,7 +2,7 @@ import React from 'react'
 
 const HomePage = () => {
     return (
-        <div className="bg-gray-200 mx-2 rounded-lg flex items-center justify-center h-[88vh]">
+        <div className="bg-eco-gray rounded-lg flex items-center justify-center h-[88vh]">
             <div className="text-center">
                 <h1 className="text-4xl font-bold text-green-600 mb-6">EcoSift Waste Segregation System</h1>
                 <div className="space-x-4">
