@@ -84,19 +84,10 @@ const VideoUpload = () => {
   return (
     <div className='flex flex-row justify-between'>
       <div className="w-3/4 mx-2 px-4 bg-gray-200 rounded-lg shadow-md h-[40rem]">
-        <label id="upload-video-label" className="block text-lg font-semibold mb-2">Upload Video</label>
-        <input
-          type="file"
-          accept="video/*"
-          onChange={handleFileChange}
-          className="border rounded p-2 w-full"
-          hidden={isUploaded}
-        />
-
         {uploadStatus && (
           <div className="mt-4">
             <div className="flex flex-row">
-              <p className="text-lg font-semibold mb-2">Uploaded Video:</p>
+              <p className="text-lg font-semibold mb-2">Video Uploaded:</p>
               <button
                 className='bg-blue-500 text-white mx-4 mb-2 py-1 px-4 rounded hover:bg-blue-600 focus:outline-none focus:shadow-outline-blue active:bg-blue-800'
                 onClick={handleRequestFrames}
@@ -110,12 +101,22 @@ const VideoUpload = () => {
           </div>
         )}
         {!uploadStatus && (
-          <button
-            onClick={handleUpload}
-            className="mt-4 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 focus:outline-none focus:shadow-outline-blue active:bg-blue-800"
-          >
-            Upload Video
-          </button>
+          <div>
+            <label id="upload-video-label" className="block text-lg font-semibold mb-2">Upload Video</label>
+            <input
+              type="file"
+              accept="video/*"
+              onChange={handleFileChange}
+              className="border rounded p-2 w-full"
+              hidden={isUploaded}
+            />
+            <button
+              onClick={handleUpload}
+              className="mt-4 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 focus:outline-none focus:shadow-outline-blue active:bg-blue-800"
+            >
+              Upload Video
+            </button>
+          </div>
         )}
         {uploadStatus && <p className="mt-2">{uploadStatus}</p>}
       </div>
