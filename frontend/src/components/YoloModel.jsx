@@ -58,13 +58,13 @@ const YoloModel = () => {
 
   return (
     <div className="rounded-lg flex flex-col justify-between mx-2 px-4 h-[40rem]">
-      <div className='w-full bg-green-100 self-start mr-4 mt-4 rounded-lg'>
-        <label id="upload-yolo-model-label" className="block text-lg font-semibold m-2">Upload Yolo Model Folder</label>
+      <div className='w-full bg-green-100 self-start mr-4 mt-4 pl-3 rounded-lg'>
+        <label id="upload-yolo-model-label" className="block text-lg font-Outfit-Medium m-2">Upload Yolo Model Folder</label>
         <input
           type="file"
           accept=".zip" // Allow users to upload only zip files
           onChange={handleFolderUpload}
-          className="m-2"
+          className=" ml-2 mb-4"
         />
       </div>
       <div className="grid grid-cols-5 gap-2 mb-4">

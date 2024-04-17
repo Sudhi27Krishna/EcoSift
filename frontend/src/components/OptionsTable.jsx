@@ -61,7 +61,7 @@ const OptionsTable = ({ setClsList, setOptionsSelected }) => {
                                     <tr key={item} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                                         <td className="w-4 p-4">
                                             <div className="flex items-center">
-                                                <input className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                                                <input className="ml-3 w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                                                     type="checkbox" value={item} onChange={(e) => handleChange(e.target.value)} checked={selectedClasses.includes(item)} />
                                             </div>
                                         </td>
@@ -76,7 +76,7 @@ const OptionsTable = ({ setClsList, setOptionsSelected }) => {
                 </table>
                 <button
                     onClick={handleSumbit}
-                    className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 focus:outline-none focus:shadow-outline-blue active:bg-blue-800"
+                    className="font-Outfit-Regular bg-blue-500 text-white py-3 px-4 rounded-b hover:bg-blue-600 focus:outline-none focus:shadow-outline-blue active:bg-blue-800"
                 >
                     Submit Options
                 </button>
