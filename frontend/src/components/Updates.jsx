@@ -2,7 +2,7 @@ import React from 'react'
 
 const Updates = ({ clsList, coordList }) => {
   return (
-    <div className='flex flex-col items-center justify-between w-1/4 bg-gray-200 rounded-lg shadow-md mx-2 p-2'>
+    <div className='flex flex-col items-center justify-between w-1/4 rounded-lg shadow-2xl mx-2 p-2'>
       <div className="flex flex-col justify-center overflow-x-auto shadow-md sm:rounded-lg w-full">
         <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
           <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">

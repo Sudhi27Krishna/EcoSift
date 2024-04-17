@@ -76,34 +76,35 @@ const WebcamPage = () => {
 
     return (
         <div className='flex flex-row justify-between'>
-            <div className="w-3/4 mx-2 px-4 bg-gray-200 rounded-lg shadow-md h-[40rem]">
-                {requestStatus ? (
-                    <div className='w-full h-full flex items-center justify-between'>
-                        <img className='mt-5' ref={videoRef} width={800} />
-                        <div className="w-1/4 h-full flex flex-col items-center justify-center">
+            <div className="w-3/4 mx-2 px-4 rounded-lg shadow-2xl h-[40rem]">
+                <div className='h-full flex items-center justify-between'>
+                    {requestStatus ? (
+                        <img ref={videoRef} width={800} />
+                    ) : (
+                        <div className='border-2 rounded-lg border-black w-[800px] h-full flex items-center justify-center place-content-center'>
                             <button
-                                onClick={handleStopFrames}
-                                className="bg-red-500 text-white my-2 py-2 px-6 rounded hover:bg-red-600 focus:outline-none focus:shadow-outline-red active:bg-red-800"
+                                onClick={handleRequestFrames}
+                                className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 focus:outline-none focus:shadow-outline-blue active:bg-blue-800"
                             >
-                                Stop Detection
-                            </button>
-                            <button
-                                onClick={handleSegregation}
-                                className="bg-green-500 text-white my-2 py-2 px-4 rounded hover:bg-green-600 focus:outline-none focus:shadow-outline-green active:bg-green-800"
-                            >
-                                Start Segregation
+                                Request Frames
                             </button>
                         </div>
-                    </div>) : (
-                    <div className='w-full h-full flex items-center justify-center'>
+                    )}
+                    <div className={requestStatus ? "w-1/4 h-full flex flex-col items-center justify-center" : "w-1/4 h-full flex flex-col items-center justify-center pointer-events-none"}>
                         <button
-                            onClick={handleRequestFrames}
-                            className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 focus:outline-none focus:shadow-outline-blue active:bg-blue-800"
+                            onClick={handleStopFrames}
+                            className="bg-red-500 text-white my-2 py-2 px-6 rounded hover:bg-red-600 focus:outline-none focus:shadow-outline-red active:bg-red-800"
                         >
-                            Request Frames
+                            Stop Detection
                         </button>
-                    </div>)
-                }
+                        <button
+                            onClick={handleSegregation}
+                            className="bg-green-500 text-white my-2 py-2 px-4 rounded hover:bg-green-600 focus:outline-none focus:shadow-outline-green active:bg-green-800"
+                        >
+                            Start Segregation
+                        </button>
+                    </div>
+                </div>
 
             </div>
             {optionsSelected ? <Updates clsList={clsList} coordList={coordList} /> :

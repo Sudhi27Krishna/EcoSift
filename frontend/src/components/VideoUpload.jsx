@@ -70,12 +70,14 @@ const VideoUpload = () => {
 
       if (response.ok) {
         setUploadStatus('Video uploaded successfully!');
+        setIsUploaded(true);
+        alert('Video uploaded successfully!');
       } else {
         setUploadStatus('Failed to upload video.');
       }
     } catch (error) {
       document.getElementById("upload-video-label").style.display = "none";
-      setIsUploaded(true);
+      alert('Error uploading video:');
       console.error('Error uploading video:', error);
       setUploadStatus('An error occurred during upload.');
     }
@@ -83,9 +85,9 @@ const VideoUpload = () => {
 
   return (
     <div className='flex flex-row justify-between'>
-      <div className="w-3/4 mx-2 px-4 bg-gray-200 rounded-lg shadow-md h-[40rem]">
-        {uploadStatus && (
-          <div className="mt-4">
+      <div className={isUploaded ? "w-3/4 flex flex-col justify-center mx-2 px-4 border-solid rounded-lg shadow-md h-[40rem]" : "w-3/4 flex justify-center items-center mx-2 px-4 border-solid rounded-lg shadow-md h-[40rem]"}>
+        {isUploaded && (
+          <div className="m-2">
             <div className="flex flex-row">
               <p className="text-lg font-semibold mb-2">Video Uploaded:</p>
               <button
@@ -100,14 +102,14 @@ const VideoUpload = () => {
             </div>
           </div>
         )}
-        {!uploadStatus && (
-          <div>
+        {!isUploaded && (
+          <div className='bg-white flex flex-col justify-center items-center p-2 rounded-lg border-dashed border-2 border-black w-[70%] h-[60%]'>
             <label id="upload-video-label" className="block text-lg font-semibold mb-2">Upload Video</label>
             <input
               type="file"
               accept="video/*"
               onChange={handleFileChange}
-              className="border rounded p-2 w-full"
+              className="border rounded p-2 ml-2"
               hidden={isUploaded}
             />
             <button
@@ -118,7 +120,7 @@ const VideoUpload = () => {
             </button>
           </div>
         )}
-        {uploadStatus && <p className="mt-2">{uploadStatus}</p>}
+        {/* {uploadStatus && <p className="m-2">{uploadStatus}</p>} */}
       </div>
       {optionsSelected ? <Updates clsList={clsList} coordList={coordList} /> :
         <OptionsTable setClsList={setClsList} setOptionsSelected={setOptionsSelected} />
