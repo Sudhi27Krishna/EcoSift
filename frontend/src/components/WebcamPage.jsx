@@ -76,7 +76,7 @@ const WebcamPage = () => {
 
     return (
         <div className='flex flex-row justify-between'>
-            <div className="w-3/4 mx-2 px-4 rounded-lg shadow-2xl h-[40rem]">
+            <div className="w-3/4 mx-2 px-4 rounded-lg h-[40rem]">
                 <div className='h-full flex items-center justify-between'>
                     {requestStatus ? (
                         <img ref={videoRef} width={800} />
