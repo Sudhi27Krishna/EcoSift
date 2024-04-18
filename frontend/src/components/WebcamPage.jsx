@@ -5,6 +5,8 @@ import OptionsTable from './OptionsTable';
 
 const url = 'http://127.0.0.1:5000';
 
+const binList = { "Can": 0, "HDPE": 1, "PET_Bottle": 2, "Tetrapak": 3, "Plastic_wrapper": 4 }
+
 const WebcamPage = () => {
     const [requestStatus, setRequestStatus] = useState(false);
     const [clsList, setClsList] = useState({});
@@ -59,7 +61,7 @@ const WebcamPage = () => {
     const handleSegregation = async () => {
         const delta_coords = [];
         Object.keys(coordList).forEach(key => {
-            delta_coords.push(new Array(coordList[key][0], coordList[key][1]));
+            delta_coords.push(new Array(coordList[key][0], coordList[key][1], binList[coordList[key][2]]));
         });
         try {
             await fetch(url.concat('/segregate'), {

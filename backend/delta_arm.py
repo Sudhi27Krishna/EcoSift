@@ -9,8 +9,8 @@ plane_circle_radius = 110
 k = plane_height / frame_height
 angshift=110 #take angshift as +ve if x-axis on paper is shifted counter-clockwise compared to the x-axis on screen
 
-type_desc=["PET","Tetrapak","Can"] # maintain the index as the bin number for sorting
-type_height = [-280,-280,-280] # maintain the same order as in type_desc for waste heights
+type_desc = ["Can","HDPE","PET_Bottle","Tetrapak"] # maintain the index as the bin number for sorting
+type_height = [-280,-255,-258,-240] # maintain the same order as in type_desc for waste heights
 e = 150.0  # end effector
 f = 230.0  # base
 re = 220.0
@@ -58,8 +58,22 @@ def send_for_sorting(x,y,b):
         y += -1 if y >= 0 else 1
         print("single point adjustment to :",x ,y )
         ang1, ang2, ang3 = delta_calcInverse(-1 * x, y, z)
-    angles_str = f"<{ang1},{ang2},{ang3}>"
-    # angles_str = f"<{ang1},{ang2},{ang3},{b}>"
+    
+    tang1, tang2, tang3 = delta_calcInverse(-1 * x, y, z+30)
+    if tang1 is None or tang2 is None or tang3 is None:
+        x,y=move_to_center_on_line(x, y)
+        print("object placed out of circle x,y resolved to :", x , y)
+        tang1, tang2, tang3 = delta_calcInverse(-1 * x, y, z+30)
+    while tang1 is None or tang2 is None or tang3 is None:
+        x += -1 if x >= 0 else 1
+        y += -1 if y >= 0 else 1
+        print("single point adjustment to :",x ,y )
+        tang1, tang2, tang3 = delta_calcInverse(-1 * x, y, z+30)
+
+
+
+    # angles_str = f"<{ang1},{ang2},{ang3}>"
+    angles_str = f"<{ang1},{ang2},{ang3},{tang1},{tang2},{tang3},{b}>"
     # Send string to Arduino
     angles_str = angles_str.strip() + '\n'  # Ensure the string is terminated properly
     ser.write(angles_str.encode())
@@ -113,7 +127,7 @@ def screenToPlane(x, y):
     print("after rotating : x =", xplane, ", y =",yplane)
     return xplane, yplane
 
-def segregate(x, y):
+def segregate(x, y, b):
     # Attempt to connect to Arduino
     global ser
     while not ser:
@@ -121,5 +135,5 @@ def segregate(x, y):
             time.sleep(3)  # Wait for 3 seconds before attempting to reconnect
 
     # x, y = map(float, input("Enter the coordinates (x,y) : ").split())
-    b = 0
+    # b = 0
     send_for_sorting(x,y,b)

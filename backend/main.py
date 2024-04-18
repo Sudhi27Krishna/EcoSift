@@ -92,7 +92,7 @@ def delta_arm_initiate():
     print("Segregation starts................")
     time.sleep(10)
     for coords in recv_coord:
-        segregate(coords[0], coords[1])
+        segregate(coords[0], coords[1], coords[2])
         time.sleep(3)
 
     return jsonify({'message': 'Coordinates sent successfully'}), 201
