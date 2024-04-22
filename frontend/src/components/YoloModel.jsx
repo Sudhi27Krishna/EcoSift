@@ -67,7 +67,7 @@ const YoloModel = () => {
           className=" ml-2 mb-4"
         />
       </div>
-      <div className="grid grid-cols-5 gap-2 mb-4">
+      <div className=" bg-white rounded-lg grid grid-cols-5 gap-2 mb-4 ">
         {images.map((image, index) => (
           <div key={index} className="flex justify-center items-center">
             <img src={image} alt={`Image ${index}`} width={250} />
