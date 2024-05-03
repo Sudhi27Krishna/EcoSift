@@ -44,6 +44,10 @@ const WebcamPage = () => {
     }, []);
 
     const handleRequestFrames = () => {
+        if(!optionsSelected){
+            alert("Select and submit the required classes before requesting the frames.");
+            return;
+        }
         setRequestStatus(true);
         socket.current.emit('request_frames_webcam');
     };

@@ -7,7 +7,7 @@ from multiprocessing import Event
 
 stop_event = Event()
 
-class_list = ["Can", "HDPE", "PET_Bottle", "Plastic_wrapper", "Tetrapak"]
+class_list = ["Can", "HDPE", "PET_Bottle", "Tetrapak"]
 
 model = YOLO('detect-model\\best-4-class.pt')
 

@@ -4,7 +4,7 @@ const url = 'http://127.0.0.1:5000';
 
 const OptionsTable = ({ setClsList, setOptionsSelected }) => {
     const [selectedClasses, setSelectedClasses] = useState([]);
-    const clsList = ["Can", "HDPE", "PET_Bottle", "Plastic_wrapper", "Tetrapak"]
+    const clsList = ["Can", "HDPE", "PET_Bottle", "Tetrapak"]
     const handleChange = (value) => {
         setSelectedClasses(prev => {
             if (prev.includes(value)) {
@@ -16,6 +16,10 @@ const OptionsTable = ({ setClsList, setOptionsSelected }) => {
     }
 
     const handleSumbit = () => {
+        if(selectedClasses.length === 0){
+            alert("No classes selected. Select atleast one class for sorting.");
+            return;
+        }
         setOptionsSelected(true);
         const clsObj = {};
         selectedClasses.forEach(item => {
