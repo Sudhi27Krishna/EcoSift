@@ -5,7 +5,7 @@ import OptionsTable from './OptionsTable';
 
 const url = 'http://127.0.0.1:5000';
 
-const binList = { "Can": 0, "HDPE": 1, "PET_Bottle": 2, "Tetrapak": 3, "Plastic_wrapper": 4 }
+const binList = { "Can": 0, "HDPE": 1, "PET_Bottle": 2, "Tetrapak": 3 }
 
 const WebcamPage = () => {
     const [requestStatus, setRequestStatus] = useState(false);
@@ -44,7 +44,7 @@ const WebcamPage = () => {
     }, []);
 
     const handleRequestFrames = () => {
-        if(!optionsSelected){
+        if (!optionsSelected) {
             alert("Select and submit the required classes before requesting the frames.");
             return;
         }

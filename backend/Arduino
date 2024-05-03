@@ -1,12 +1,11 @@
 #include <Servo.h>
 #define pA 110
-#define mR 86 // resting postion after pickup
 
 Servo servo1;
 Servo servo2;
 Servo servo3;
 
-int relayPin = 7;
+int relayPin = 8;
 int values[7] = {0};
 int bin[4][3] = {{16,53,87},{37,22,99},{99,18,32},{81,47,7}}; //Can,HDPE,PET_Bottle,Tetrapak,Plastic_wrapper bin angular  coordinates
 int currentIndex = 0;
@@ -80,7 +79,6 @@ void sendAcknowledgment(int b1, int b2, int b3, int b) {
 }
 
 void loop() {
-  digitalWrite(relayPin, HIGH);
   if (Serial.available() > 0) {
     processString();
   }
@@ -96,24 +94,32 @@ void loop() {
     servo1.write(t1);
     servo2.write(t2);
     servo3.write(t3);
-    delay(1500);    
+    delay(2000);    
     servo1.write(b1);
     servo2.write(b2);
     servo3.write(b3);
-    delay(3000);
+    delay(3500);
     // digitalWrite(relayPin, LOW);
-    delay(1000);
+    // delay(1000);
+    servo1.write(t1);
+    servo2.write(t2);
+    servo3.write(t3);
+    delay(2000);
     servo1.write(pA);
     servo2.write(pA);
     servo3.write(pA);
-    delay(2500);
+    delay(2000);
+    servo1.write(130);
+    servo2.write(130);
+    servo3.write(130);
+    delay(2000);
     servo1.write(bin[b][0]);
     servo2.write(bin[b][1]);
     servo3.write(bin[b][2]);
-    delay(1500);
-    digitalWrite(relayPin, LOW);
-    delay(500);
+    delay(2000);
     digitalWrite(relayPin, HIGH);
+    delay(1000);
+    digitalWrite(relayPin, LOW);
     delay(1000);
     currentIndex=0;
     sendAcknowledgment(b1, b2, b3, b);

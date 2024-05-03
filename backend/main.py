@@ -93,7 +93,7 @@ def delta_arm_initiate():
     time.sleep(10)
     for coords in recv_coord:
         segregate(coords[0], coords[1], coords[2])
-        time.sleep(3)
+        time.sleep(5)
 
     return jsonify({'message': 'Coordinates sent successfully'}), 201
 

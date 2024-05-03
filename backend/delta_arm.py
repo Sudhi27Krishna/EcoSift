@@ -4,13 +4,14 @@ import math
 
 frame_width = 640
 frame_height = 480
-plane_height = 415  # in mm
+# plane_height = 415  # in mm
+plane_height = 440
 plane_circle_radius = 110
 k = plane_height / frame_height
 angshift=110 #take angshift as +ve if x-axis on paper is shifted counter-clockwise compared to the x-axis on screen
 
 type_desc = ["Can","HDPE","PET_Bottle","Tetrapak"] # maintain the index as the bin number for sorting
-type_height = [-280,-255,-258,-240] # maintain the same order as in type_desc for waste heights
+type_height = [-255,-255,-240,-255] # maintain the same order as in type_desc for waste heights
 e = 150.0  # end effector
 f = 230.0  # base
 re = 220.0
