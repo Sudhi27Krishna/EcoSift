@@ -9,7 +9,7 @@ stop_event = Event()
 
 class_list = ["Can", "HDPE", "PET_Bottle", "Plastic_wrapper", "Tetrapak"]
 
-model = YOLO('detect-model\\best-200m.pt')
+model = YOLO('detect-model\\best-4-class.pt')
 
 line_Zone = []
 polygon_Zone = []
