@@ -7,7 +7,8 @@ Servo servo3;
 
 int relayPin = 8;
 int values[7] = {0};
-int bin[4][3] = {{16,53,87},{37,22,99},{99,18,32},{81,47,7}}; //Can,HDPE,PET_Bottle,Tetrapak,Plastic_wrapper bin angular  coordinates
+int bin[4][3] = {{16,53,87},{37,22,99},{99,18,32},{99,18,32}};
+// int bin[4][3] = {{16,53,87},{37,22,99},{99,18,32},{81,47,7}}; //Can,HDPE,PET_Bottle,Tetrapak bin angular  coordinates
 int currentIndex = 0;
 int sign = 1;
 int b1 = 110 , b2=110, b3=110;
@@ -119,6 +120,9 @@ void loop() {
     delay(2000);
     digitalWrite(relayPin, HIGH);
     delay(1000);
+    servo1.write(pA);
+    servo2.write(pA);
+    servo3.write(pA);
     digitalWrite(relayPin, LOW);
     delay(1000);
     currentIndex=0;

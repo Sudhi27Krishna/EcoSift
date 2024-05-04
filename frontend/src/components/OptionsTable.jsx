@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 const url = 'http://127.0.0.1:5000';
 
 const OptionsTable = ({ setClsList, setOptionsSelected }) => {
-    const [selectedClasses, setSelectedClasses] = useState([]);
+    const [selectedClasses, setSelectedClasses] = useState(["Can", "HDPE", "PET_Bottle", "Tetrapak"]);
     const clsList = ["Can", "HDPE", "PET_Bottle", "Tetrapak"]
     const handleChange = (value) => {
         setSelectedClasses(prev => {
@@ -16,7 +16,7 @@ const OptionsTable = ({ setClsList, setOptionsSelected }) => {
     }
 
     const handleSumbit = () => {
-        if(selectedClasses.length === 0){
+        if (selectedClasses.length === 0) {
             alert("No classes selected. Select atleast one class for sorting.");
             return;
         }
